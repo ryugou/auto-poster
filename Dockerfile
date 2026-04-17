@@ -1,10 +1,10 @@
 # --- dev ---
-FROM rust:1-bookworm AS dev
+FROM rust:1.87.0-bookworm AS dev
 RUN cargo install cargo-watch sqlx-cli --locked
 WORKDIR /app
 
 # --- build ---
-FROM rust:1-bookworm AS build
+FROM rust:1.87.0-bookworm AS build
 WORKDIR /app
 COPY . .
 RUN cargo build --release
