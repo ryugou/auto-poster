@@ -82,15 +82,12 @@ pub fn load_app_config(config_dir: &Path) -> Result<AppConfig> {
     Ok(config)
 }
 
-pub fn load_account_configs(config_dir: &Path) -> Result<Vec<AccountConfig>> {
-    let accounts_dir = config_dir.join("accounts");
-    let mut configs = Vec::new();
-
-    if !accounts_dir.exists() {
-        return Ok(configs);
+fn load_yaml_dir<T: serde::de::DeserializeOwned>(dir: &Path) -> Result<Vec<T>> {
+    if !dir.exists() {
+        return Ok(Vec::new());
     }
 
-    let mut entries: Vec<_> = std::fs::read_dir(&accounts_dir)?
+    let mut entries: Vec<_> = std::fs::read_dir(dir)?
         .filter_map(|e| e.ok())
         .filter(|e| {
             e.path()
@@ -100,40 +97,21 @@ pub fn load_account_configs(config_dir: &Path) -> Result<Vec<AccountConfig>> {
         .collect();
     entries.sort_by_key(|e| e.path());
 
-    for entry in entries {
-        let content = std::fs::read_to_string(entry.path())?;
-        let config: AccountConfig = serde_yaml::from_str(&content)?;
-        configs.push(config);
-    }
+    entries
+        .into_iter()
+        .map(|entry| {
+            let content = std::fs::read_to_string(entry.path())?;
+            Ok(serde_yaml::from_str(&content)?)
+        })
+        .collect()
+}
 
-    Ok(configs)
+pub fn load_account_configs(config_dir: &Path) -> Result<Vec<AccountConfig>> {
+    load_yaml_dir(&config_dir.join("accounts"))
 }
 
 pub fn load_info_source_configs(config_dir: &Path) -> Result<Vec<InfoSourceConfig>> {
-    let sources_dir = config_dir.join("info_sources");
-    let mut configs = Vec::new();
-
-    if !sources_dir.exists() {
-        return Ok(configs);
-    }
-
-    let mut entries: Vec<_> = std::fs::read_dir(&sources_dir)?
-        .filter_map(|e| e.ok())
-        .filter(|e| {
-            e.path()
-                .extension()
-                .is_some_and(|ext| ext == "yaml" || ext == "yml")
-        })
-        .collect();
-    entries.sort_by_key(|e| e.path());
-
-    for entry in entries {
-        let content = std::fs::read_to_string(entry.path())?;
-        let config: InfoSourceConfig = serde_yaml::from_str(&content)?;
-        configs.push(config);
-    }
-
-    Ok(configs)
+    load_yaml_dir(&config_dir.join("info_sources"))
 }
 
 #[cfg(test)]

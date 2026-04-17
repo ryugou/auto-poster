@@ -48,20 +48,13 @@ pub async fn list_enabled_for_account(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::db::{self, create_pool, run_migrations};
-
-    async fn setup() -> (SqlitePool, AccountId) {
-        let pool = create_pool("sqlite::memory:").await.unwrap();
-        run_migrations(&pool).await.unwrap();
-        let account_id = db::account::upsert_by_yaml_key(&pool, "test_account")
-            .await
-            .unwrap();
-        (pool, account_id)
-    }
+    use crate::testing;
 
     #[tokio::test]
     async fn upsert_creates_new_info_source() {
-        let (pool, account_id) = setup().await;
+        let (pool, account_id) = testing::test_pool_with_account("test_account")
+            .await
+            .unwrap();
         let id = upsert_by_yaml_key(&pool, "grok", account_id).await.unwrap();
         assert!(id > 0);
 
@@ -72,7 +65,9 @@ mod tests {
 
     #[tokio::test]
     async fn upsert_is_idempotent() {
-        let (pool, account_id) = setup().await;
+        let (pool, account_id) = testing::test_pool_with_account("test_account")
+            .await
+            .unwrap();
         let id1 = upsert_by_yaml_key(&pool, "grok", account_id).await.unwrap();
         let id2 = upsert_by_yaml_key(&pool, "grok", account_id).await.unwrap();
         assert_eq!(id1, id2);
@@ -80,7 +75,9 @@ mod tests {
 
     #[tokio::test]
     async fn list_enabled_for_account_works() {
-        let (pool, account_id) = setup().await;
+        let (pool, account_id) = testing::test_pool_with_account("test_account")
+            .await
+            .unwrap();
         upsert_by_yaml_key(&pool, "grok", account_id).await.unwrap();
         upsert_by_yaml_key(&pool, "rss", account_id).await.unwrap();
 

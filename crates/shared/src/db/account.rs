@@ -37,17 +37,11 @@ pub async fn list_enabled(pool: &SqlitePool) -> Result<Vec<Account>> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::db::{create_pool, run_migrations};
-
-    async fn setup() -> SqlitePool {
-        let pool = create_pool("sqlite::memory:").await.unwrap();
-        run_migrations(&pool).await.unwrap();
-        pool
-    }
+    use crate::testing;
 
     #[tokio::test]
     async fn upsert_creates_new_account() {
-        let pool = setup().await;
+        let pool = testing::test_pool().await;
         let id = upsert_by_yaml_key(&pool, "test_account").await.unwrap();
         assert!(id > 0);
 
@@ -61,7 +55,7 @@ mod tests {
 
     #[tokio::test]
     async fn upsert_is_idempotent() {
-        let pool = setup().await;
+        let pool = testing::test_pool().await;
         let id1 = upsert_by_yaml_key(&pool, "test_account").await.unwrap();
         let id2 = upsert_by_yaml_key(&pool, "test_account").await.unwrap();
         assert_eq!(id1, id2);
@@ -69,7 +63,7 @@ mod tests {
 
     #[tokio::test]
     async fn list_enabled_filters_disabled() {
-        let pool = setup().await;
+        let pool = testing::test_pool().await;
         upsert_by_yaml_key(&pool, "enabled_one").await.unwrap();
         let id2 = upsert_by_yaml_key(&pool, "disabled_one").await.unwrap();
         sqlx::query("UPDATE accounts SET enabled = FALSE WHERE id = ?")
