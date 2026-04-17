@@ -1,5 +1,6 @@
 COMPOSE := docker compose
 RUN     := $(COMPOSE) run --rm app
+CARGO_RUN := cargo run -p auto-poster --
 
 .PHONY: help
 help: ## ヘルプ表示
@@ -19,25 +20,25 @@ build-release: ## release image をビルド
 
 .PHONY: migrate
 migrate: ## マイグレーション適用
-	$(RUN) cargo run -- migrate
+	$(RUN) $(CARGO_RUN) migrate
 
 .PHONY: seed
 seed: ## YAML → DB upsert
-	$(RUN) cargo run -- seed
+	$(RUN) $(CARGO_RUN) seed
 
 # --- バッチ ---
 
 .PHONY: collect
 collect: ## 情報収集（ACCOUNT= で絞り込み可）
-	$(RUN) cargo run -- collect $(if $(ACCOUNT),--account $(ACCOUNT))
+	$(RUN) $(CARGO_RUN) collect $(if $(ACCOUNT),--account $(ACCOUNT))
 
 .PHONY: generate
 generate: ## ドラフト生成（ACCOUNT= で絞り込み可）
-	$(RUN) cargo run -- generate $(if $(ACCOUNT),--account $(ACCOUNT))
+	$(RUN) $(CARGO_RUN) generate $(if $(ACCOUNT),--account $(ACCOUNT))
 
 .PHONY: operate
 operate: ## レビュー TUI
-	$(COMPOSE) run --rm -it app cargo run -- operate
+	$(COMPOSE) run --rm -it app $(CARGO_RUN) operate
 
 # --- テスト / lint ---
 
