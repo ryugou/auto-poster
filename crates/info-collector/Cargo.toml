@@ -1,0 +1,11 @@
+[package]
+name = "auto-poster-info-collector"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+auto-poster-shared = { path = "../shared" }
+anyhow.workspace = true
+sqlx.workspace = true
+tokio.workspace = true
+tracing.workspace = true
