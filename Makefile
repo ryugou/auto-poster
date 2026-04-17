@@ -19,25 +19,25 @@ build-release: ## release image をビルド
 
 .PHONY: migrate
 migrate: ## マイグレーション適用
-	$(RUN) auto-poster migrate
+	$(RUN) cargo run -- migrate
 
 .PHONY: seed
 seed: ## YAML → DB upsert
-	$(RUN) auto-poster seed
+	$(RUN) cargo run -- seed
 
 # --- バッチ ---
 
 .PHONY: collect
 collect: ## 情報収集（ACCOUNT= で絞り込み可）
-	$(RUN) auto-poster collect $(if $(ACCOUNT),--account $(ACCOUNT))
+	$(RUN) cargo run -- collect $(if $(ACCOUNT),--account $(ACCOUNT))
 
 .PHONY: generate
 generate: ## ドラフト生成（ACCOUNT= で絞り込み可）
-	$(RUN) auto-poster generate $(if $(ACCOUNT),--account $(ACCOUNT))
+	$(RUN) cargo run -- generate $(if $(ACCOUNT),--account $(ACCOUNT))
 
 .PHONY: operate
 operate: ## レビュー TUI
-	$(COMPOSE) run --rm -it app auto-poster operate
+	$(COMPOSE) run --rm -it app cargo run -- operate
 
 # --- テスト / lint ---
 

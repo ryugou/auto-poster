@@ -16,7 +16,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 COPY --from=build /app/target/release/auto-poster /usr/local/bin/
 COPY --from=build /app/config /etc/auto-poster/config
-COPY --from=build /app/migrations /etc/auto-poster/migrations
+RUN mkdir -p /var/lib/auto-poster
+ENV APP_DATABASE_URL="sqlite:/var/lib/auto-poster/auto-poster.db"
 WORKDIR /etc/auto-poster
 ENTRYPOINT ["auto-poster", "--config-dir", "/etc/auto-poster/config"]
 CMD ["--help"]
