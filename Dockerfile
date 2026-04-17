@@ -17,5 +17,6 @@ RUN apt-get update \
 COPY --from=build /app/target/release/auto-poster /usr/local/bin/
 COPY --from=build /app/config /etc/auto-poster/config
 COPY --from=build /app/migrations /etc/auto-poster/migrations
-ENTRYPOINT ["auto-poster"]
+WORKDIR /etc/auto-poster
+ENTRYPOINT ["auto-poster", "--config-dir", "/etc/auto-poster/config"]
 CMD ["--help"]

@@ -88,7 +88,8 @@ fn load_yaml_dir<T: serde::de::DeserializeOwned>(dir: &Path) -> Result<Vec<T>> {
     }
 
     let mut entries: Vec<_> = std::fs::read_dir(dir)?
-        .filter_map(|e| e.ok())
+        .collect::<std::io::Result<Vec<_>>>()?
+        .into_iter()
         .filter(|e| {
             e.path()
                 .extension()

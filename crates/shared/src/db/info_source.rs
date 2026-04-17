@@ -12,7 +12,7 @@ pub async fn upsert_by_yaml_key(
         r#"
         INSERT INTO info_sources (yaml_key, account_id)
         VALUES (?, ?)
-        ON CONFLICT(yaml_key) DO UPDATE SET updated_at = datetime('now')
+        ON CONFLICT(yaml_key) DO UPDATE SET account_id = excluded.account_id, updated_at = datetime('now')
         RETURNING id
         "#,
     )
