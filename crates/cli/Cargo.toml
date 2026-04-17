@@ -16,4 +16,5 @@ auto-poster-dashboard = { path = "../dashboard" }
 anyhow.workspace = true
 clap.workspace = true
 tokio.workspace = true
+sqlx.workspace = true
 tracing.workspace = true

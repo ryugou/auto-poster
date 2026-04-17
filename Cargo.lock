@@ -111,6 +111,7 @@ dependencies = [
  "auto-poster-post-operator",
  "auto-poster-shared",
  "clap",
+ "sqlx",
  "tokio",
  "tracing",
 ]
