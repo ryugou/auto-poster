@@ -3,7 +3,7 @@ services:
     build:
       context: .
       target: dev
-    command: cargo watch -x "run -- serve"
+    command: cargo watch -x "run -p auto-poster -- serve"
     ports:
       - "3000:3000"
     volumes:

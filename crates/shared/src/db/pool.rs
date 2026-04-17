@@ -6,13 +6,18 @@ use std::time::Duration;
 use crate::error::Result;
 
 pub async fn create_pool(database_url: &str) -> Result<SqlitePool> {
+    let is_memory = database_url.contains(":memory:");
+
     let options = SqliteConnectOptions::from_str(database_url)?
         .create_if_missing(true)
         .journal_mode(sqlx::sqlite::SqliteJournalMode::Wal)
         .foreign_keys(true);
 
+    // in-memory SQLite は接続ごとに独立した DB になるため、max_connections(1) で統一
+    let max_conns = if is_memory { 1 } else { 5 };
+
     let pool = SqlitePoolOptions::new()
-        .max_connections(5)
+        .max_connections(max_conns)
         .acquire_timeout(Duration::from_secs(5))
         .connect_with(options)
         .await?;
