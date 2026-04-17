@@ -1,0 +1,4 @@
+key: rakuten_books
+account_key: manga_shinkan
+source_type: api
+display_name: 楽天ブックスAPI
