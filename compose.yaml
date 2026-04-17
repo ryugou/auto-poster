@@ -1,0 +1,35 @@
+services:
+  dashboard:
+    build:
+      context: .
+      target: dev
+    command: cargo watch -x "run -p auto-poster -- serve"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/app/target
+      - db-data:/app/data
+    env_file:
+      - path: .env
+        required: false
+
+  app:
+    build:
+      context: .
+      target: dev
+    volumes:
+      - .:/app
+      - cargo-cache:/usr/local/cargo/registry
+      - target-cache:/app/target
+      - db-data:/app/data
+    env_file:
+      - path: .env
+        required: false
+    profiles: ["cli"]
+
+volumes:
+  cargo-cache:
+  target-cache:
+  db-data:

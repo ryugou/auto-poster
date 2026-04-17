@@ -1,0 +1,18 @@
+[package]
+name = "auto-poster-shared"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+chrono.workspace = true
+figment.workspace = true
+serde.workspace = true
+serde_yaml.workspace = true
+sqlx.workspace = true
+thiserror.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+[features]
+testing = []

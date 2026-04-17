@@ -1,0 +1,44 @@
+key: manga_shinkan
+display_name: マンガ新刊速報
+handle: "@manga_shinkan"
+domain: manga
+
+schedule:
+  posting_slots:
+    - label: morning
+      range: "07:00-09:00"
+    - label: noon
+      range: "12:00-13:00"
+    - label: evening
+      range: "21:00-23:00"
+  info_collector_frequency: 1
+  post_generator_frequency: 3
+
+freshness_requirement: "発売日当日内"
+
+pipeline:
+  step2_decompose:
+    fields:
+      - title
+      - volume
+      - author
+      - publisher
+      - release_date
+      - price
+      - ebook_available
+      - sale_info
+      - buzz_score
+  step3_filter:
+    include_criteria:
+      - "話題性が一定以上"
+      - "一般読者に知名度がある"
+      - "事実として確認可能"
+    exclude_criteria:
+      - "同人誌・成人向け"
+      - "特定読者層に限定されすぎる作品"
+      - "発売日が未定・不確定な情報"
+
+ng_rules:
+  - "ネタバレ禁止"
+  - "作者・作品への誹謗中傷禁止"
+  - "海賊版サイトへの言及・リンク禁止"

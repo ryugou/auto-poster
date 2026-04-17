@@ -1,0 +1,41 @@
+key: ai_shinchaku
+display_name: AI新着まとめ
+handle: "@ai_shinchaku"
+domain: ai_tools
+
+schedule:
+  posting_slots:
+    - label: morning
+      range: "07:00-09:00"
+    - label: noon
+      range: "12:00-13:00"
+    - label: evening
+      range: "21:00-23:00"
+  info_collector_frequency: 3
+  post_generator_frequency: 3
+
+freshness_requirement: "数時間以内"
+
+pipeline:
+  step2_decompose:
+    fields:
+      - tool_name
+      - provider
+      - capabilities
+      - pricing
+      - release_date
+      - buzz_score
+  step3_filter:
+    include_criteria:
+      - "話題性が一定以上"
+      - "一般ユーザーが使える"
+      - "事実として確認可能"
+    exclude_criteria:
+      - "研究論文レベルの抽象的情報"
+      - "エンジニア以外には価値がわからない技術的深掘り"
+      - "事実確認が取れない情報"
+
+ng_rules:
+  - "有料プロモーションを示唆しない"
+  - "特定ツールを過度にディスらない"
+  - "AI生成であることを示唆する表現は避ける"

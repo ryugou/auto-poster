@@ -1,0 +1,20 @@
+[package]
+name = "auto-poster"
+version.workspace = true
+edition.workspace = true
+
+[[bin]]
+name = "auto-poster"
+path = "src/main.rs"
+
+[dependencies]
+auto-poster-shared = { path = "../shared" }
+auto-poster-info-collector = { path = "../info-collector" }
+auto-poster-post-generator = { path = "../post-generator" }
+auto-poster-post-operator = { path = "../post-operator" }
+auto-poster-dashboard = { path = "../dashboard" }
+anyhow.workspace = true
+clap.workspace = true
+tokio.workspace = true
+sqlx.workspace = true
+tracing.workspace = true

@@ -1,0 +1,4 @@
+key: grok
+account_key: ai_shinchaku
+source_type: api
+display_name: xAI Grok API
