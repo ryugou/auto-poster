@@ -9,7 +9,7 @@ pub enum AppError {
     Migration(#[from] sqlx::migrate::MigrateError),
 
     #[error("Config error: {0}")]
-    Config(#[from] figment::Error),
+    Config(Box<figment::Error>),
 
     #[error("IO error: {0}")]
     Io(#[from] std::io::Error),
@@ -25,6 +25,12 @@ pub enum AppError {
 
     #[error("{0}")]
     Other(String),
+}
+
+impl From<figment::Error> for AppError {
+    fn from(e: figment::Error) -> Self {
+        AppError::Config(Box::new(e))
+    }
 }
 
 pub type Result<T> = std::result::Result<T, AppError>;

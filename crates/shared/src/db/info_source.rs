@@ -81,12 +81,8 @@ mod tests {
     #[tokio::test]
     async fn list_enabled_for_account_works() {
         let (pool, account_id) = setup().await;
-        upsert_by_yaml_key(&pool, "grok", account_id)
-            .await
-            .unwrap();
-        upsert_by_yaml_key(&pool, "rss", account_id)
-            .await
-            .unwrap();
+        upsert_by_yaml_key(&pool, "grok", account_id).await.unwrap();
+        upsert_by_yaml_key(&pool, "rss", account_id).await.unwrap();
 
         let sources = list_enabled_for_account(&pool, account_id).await.unwrap();
         assert_eq!(sources.len(), 2);

@@ -1,7 +1,7 @@
 use std::path::Path;
 
-use figment::providers::{Env, Format, Yaml};
 use figment::Figment;
+use figment::providers::{Env, Format, Yaml};
 use serde::Deserialize;
 
 use crate::error::Result;

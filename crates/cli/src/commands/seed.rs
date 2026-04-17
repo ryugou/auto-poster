@@ -9,8 +9,8 @@ use auto_poster_shared::db;
 pub async fn execute(pool: &SqlitePool, config_dir: &Path) -> Result<()> {
     tracing::info!("Seeding database from config files...");
 
-    let account_configs = config::load_account_configs(config_dir)
-        .context("Failed to load account configs")?;
+    let account_configs =
+        config::load_account_configs(config_dir).context("Failed to load account configs")?;
 
     for ac in &account_configs {
         let id = db::account::upsert_by_yaml_key(pool, &ac.key).await?;

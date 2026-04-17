@@ -137,7 +137,7 @@ mod tests {
 
     #[test]
     fn template_type_variants_exist() {
-        let types = vec![
+        let types = [
             TemplateType::T1,
             TemplateType::T2,
             TemplateType::T3,
@@ -149,7 +149,7 @@ mod tests {
 
     #[test]
     fn review_status_variants_exist() {
-        let statuses = vec![
+        let statuses = [
             ReviewStatus::Pending,
             ReviewStatus::Approved,
             ReviewStatus::Rejected,
@@ -159,7 +159,7 @@ mod tests {
 
     #[test]
     fn metrics_source_variants_exist() {
-        let sources = vec![MetricsSource::Manual, MetricsSource::XApi];
+        let sources = [MetricsSource::Manual, MetricsSource::XApi];
         assert_eq!(sources.len(), 2);
     }
 }

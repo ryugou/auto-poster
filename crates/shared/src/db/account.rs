@@ -51,7 +51,10 @@ mod tests {
         let id = upsert_by_yaml_key(&pool, "test_account").await.unwrap();
         assert!(id > 0);
 
-        let account = find_by_yaml_key(&pool, "test_account").await.unwrap().unwrap();
+        let account = find_by_yaml_key(&pool, "test_account")
+            .await
+            .unwrap()
+            .unwrap();
         assert_eq!(account.yaml_key, "test_account");
         assert!(account.enabled);
     }
